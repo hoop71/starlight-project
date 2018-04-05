@@ -9,14 +9,38 @@ class Display extends Component {
       error: null,
       isLoaded: false,
       cans: [],
-      searchTerm: ''
+      searchTerm: '',
+      sorted: false
     };
   }
 
-  // handles search input
+  //handle search term
   handleSearchTermChange = event => {
-    this.setState({ searchTerm: event.target.value });
+    this.setState({
+      searchTerm: event.target.value
+    });
   };
+
+  // sort funtion
+  onSort(event, sortKey) {
+    const { sorted, cans } = this.state;
+    // sort based on on sortKey
+    if (!sorted) {
+      cans.sort((a, b) => a[sortKey].localeCompare(b[sortKey]));
+      this.setState({
+        cans
+      });
+    } else {
+      cans.sort((a, b) => b[sortKey].localeCompare(a[sortKey]));
+      this.setState({
+        cans
+      });
+    }
+    // toggle the previous sort state
+    this.setState(prevState => ({
+      sorted: !prevState.sorted
+    }));
+  }
 
   // clean date function
   getCleanDate = date => dateformat(date, 'mmmm, yyyy, h:MM:ss TT');
@@ -58,9 +82,9 @@ class Display extends Component {
             <table className="table">
               <thead className="table-header">
                 <tr className="table-header-row">
-                  <th>Name:</th>
-                  <th>Serial:</th>
-                  <th>Size:</th>
+                  <th onClick={event => this.onSort(event, 'name')}>Name:</th>
+                  <th onClick={event => this.onSort(event, 'serial')}>Serial:</th>
+                  <th onClick={event => this.onSort(event, 'size')}>Size:</th>
                   <th>Created Date:</th>
                   <th>Modified Date:</th>
                   <th>Location Name:</th>
