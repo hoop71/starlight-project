@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import dateformat from 'dateformat';
 
 class Display extends Component {
   constructor(props) {
@@ -15,14 +16,21 @@ class Display extends Component {
     this.setState({ searchTerm: event.target.value });
   };
 
+  getCleanDate = date => dateformat(date, 'mmmm, yyyy, h:MM:ss TT');
+
   componentDidMount() {
     axios
       .get(`http://localhost:3000/cans`)
       .then(response => {
-        console.log(response);
+        const createdDate = response.data.map(can => this.getCleanDate(`${can.createdDate}`));
+        const modifiedDate = response.data.map(can => this.getCleanDate(`${can.modifiedDate}`));
         this.setState({
           isLoaded: true,
-          cans: response.data
+          cans: {
+            data: response.data,
+            createdDate: createdDate,
+            modifiedDate: modifiedDate
+          }
         });
       })
       .catch(error => {
@@ -31,7 +39,9 @@ class Display extends Component {
   }
 
   render() {
-    const { error, isLoaded, cans, searchTerm } = this.state;
+    const { error, isLoaded, searchTerm, cans } = this.state;
+    const { data, modifiedDate, createdDate } = this.state.cans;
+    console.log(modifiedDate);
     if (error) {
       return <div>Error: {error.message}</div>;
     } else if (!isLoaded) {
@@ -52,24 +62,32 @@ class Display extends Component {
             <table className="table">
               <thead className="table-header">
                 <tr className="table-header-row">
-                  <th>Can ID:</th>
-                  <th>Location:</th>
+                  <th>Name:</th>
+                  <th>Serial:</th>
                   <th>Size:</th>
+                  <th>Created Date:</th>
+                  <th>Modified Date:</th>
+                  <th>Location Name:</th>
                 </tr>
               </thead>
               {cans
                 .filter(
                   can =>
-                    `${can.id} ${can.location.name} ${can.size}`
+                    `${can.name} ${can.data.serial} ${can.data.size} ${can.createdDate} ${can.modifiedDate} ${
+                      can.data.location.name
+                    } `
                       .toUpperCase()
                       .indexOf(this.state.searchTerm.toUpperCase()) >= 0
                 )
-                .map(can => (
-                  <tbody key={can.id} className="center">
+                .map((data, index) => (
+                  <tbody key={data.serial}>
                     <tr>
-                      <td>{can.id}</td>
-                      <td>{can.location.name}</td>
-                      <td>{can.size}</td>{' '}
+                      <td>{data.name}</td>
+                      <td>{data.serial}</td>
+                      <td>{data.size}</td>
+                      <td className="right-align">{createdDate[index]}</td>
+                      <td className="right-align">{modifiedDate[index]}</td>
+                      <td className="right-align">{data.location.name}</td>
                     </tr>
                   </tbody>
                 ))}
