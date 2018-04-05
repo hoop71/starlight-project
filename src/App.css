@@ -22,3 +22,54 @@
 .center {
   text-align: center;
 }
+
+section {
+  margin-top: 60px;
+}
+
+header {
+  z-index: 10;
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  background-color: #fafafa;
+  padding: 8px 30px;
+}
+
+header > h1 {
+  font-family: Open-sans;
+  font-weight: normal;
+  color: #c44f1a;
+  margin: 0;
+}
+
+header > h1 > a {
+  color: #c44f1a;
+  text-decoration: none;
+}
+
+header > h2 {
+  font-weight: normal;
+  margin: 0;
+}
+
+header > h2 > a {
+  color: #aaa;
+  text-decoration: none;
+}
+
+header > input {
+  min-width: 250px;
+  max-width: 350px;
+  width: 33%;
+  padding: 4px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  margin-right: 3em;
+}

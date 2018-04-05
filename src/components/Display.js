@@ -34,24 +34,37 @@ class Display extends Component {
       return <div>Loading...</div>;
     } else {
       return (
-        <table className="table">
-          <thead className="table-header">
-            <tr className="table-header-row">
-              <th>Can ID:</th>
-              <th>Location:</th>
-              <th>Size:</th>
-            </tr>
-          </thead>
-          {cans.map(can => (
-            <tbody key={can.id} className="center">
-              <tr>
-                <td>{can.id}</td>
-                <td>{can.location.name}</td>
-                <td>{can.size}</td>{' '}
-              </tr>
-            </tbody>
-          ))}
-        </table>
+        <div>
+          <header>
+            <h1>Starlight</h1>
+            <input
+              onChange={this.handleSearchTermChange}
+              value={this.state.searchTerm}
+              type="text"
+              placeholder="Search"
+            />
+          </header>
+          <section>
+            <table className="table">
+              <thead className="table-header">
+                <tr className="table-header-row">
+                  <th>Can ID:</th>
+                  <th>Location:</th>
+                  <th>Size:</th>
+                </tr>
+              </thead>
+              {cans.map(can => (
+                <tbody key={can.id} className="center">
+                  <tr>
+                    <td>{can.id}</td>
+                    <td>{can.location.name}</td>
+                    <td>{can.size}</td>{' '}
+                  </tr>
+                </tbody>
+              ))}
+            </table>
+          </section>
+        </div>
       );
     }
   }
