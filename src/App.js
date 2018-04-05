@@ -14,7 +14,7 @@ class App extends Component {
 
   componentDidMount() {
     axios
-      .get(`http://localhost:3004/cans?id=2521`)
+      .get(`http://localhost:3000/cans`)
       .then(response => {
         console.log(response);
         this.setState({
