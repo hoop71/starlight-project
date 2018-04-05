@@ -12,25 +12,28 @@ class Display extends Component {
       searchTerm: ''
     };
   }
+
+  // handles search input
   handleSearchTermChange = event => {
     this.setState({ searchTerm: event.target.value });
   };
 
+  // clean date function
   getCleanDate = date => dateformat(date, 'mmmm, yyyy, h:MM:ss TT');
 
   componentDidMount() {
     axios
-      .get(`http://localhost:3000/cans`)
+      .get(`http://localhost:3004/cans`)
       .then(response => {
-        const createdDate = response.data.map(can => this.getCleanDate(`${can.createdDate}`));
-        const modifiedDate = response.data.map(can => this.getCleanDate(`${can.modifiedDate}`));
+        // make a copy of the response
+        const data = response.data.map(map => map);
+        // clean createdDate and modifiedDate
+        data.forEach(can => (can.createdDate = this.getCleanDate(`${can.createdDate}`)));
+        data.forEach(can => (can.modifiedDate = this.getCleanDate(`${can.modifiedDate}`)));
+        // set cleaned respose to state
         this.setState({
           isLoaded: true,
-          cans: {
-            data: response.data,
-            createdDate: createdDate,
-            modifiedDate: modifiedDate
-          }
+          cans: data
         });
       })
       .catch(error => {
@@ -40,8 +43,6 @@ class Display extends Component {
 
   render() {
     const { error, isLoaded, searchTerm, cans } = this.state;
-    const { data, modifiedDate, createdDate } = this.state.cans;
-    console.log(modifiedDate);
     if (error) {
       return <div>Error: {error.message}</div>;
     } else if (!isLoaded) {
@@ -51,12 +52,7 @@ class Display extends Component {
         <div>
           <header>
             <h1>Starlight</h1>
-            <input
-              onChange={this.handleSearchTermChange}
-              value={this.state.searchTerm}
-              type="text"
-              placeholder="Search"
-            />
+            <input onChange={this.handleSearchTermChange} value={searchTerm} type="text" placeholder="Search" />
           </header>
           <section>
             <table className="table">
@@ -73,21 +69,22 @@ class Display extends Component {
               {cans
                 .filter(
                   can =>
-                    `${can.name} ${can.data.serial} ${can.data.size} ${can.createdDate} ${can.modifiedDate} ${
-                      can.data.location.name
-                    } `
+                    // create string for which to search within
+                    `${can.name} ${can.serial} ${can.size} ${can.createdDate} ${can.modifiedDate} ${can.location.name} `
+                      // make case-insensitive
                       .toUpperCase()
+                      // define filter parameteres
                       .indexOf(this.state.searchTerm.toUpperCase()) >= 0
                 )
-                .map((data, index) => (
-                  <tbody key={data.serial}>
+                .map(can => (
+                  <tbody key={can.serial}>
                     <tr>
-                      <td>{data.name}</td>
-                      <td>{data.serial}</td>
-                      <td>{data.size}</td>
-                      <td className="right-align">{createdDate[index]}</td>
-                      <td className="right-align">{modifiedDate[index]}</td>
-                      <td className="right-align">{data.location.name}</td>
+                      <td>{can.name}</td>
+                      <td>{can.serial}</td>
+                      <td>{can.size}</td>
+                      <td className="right-align">{can.createdDate}</td>
+                      <td className="right-align">{can.modifiedDate}</td>
+                      <td className="right-align">{can.location.name}</td>
                     </tr>
                   </tbody>
                 ))}
