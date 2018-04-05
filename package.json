@@ -13,6 +13,7 @@
     "start": "react-scripts start",
     "json-server": "json-server --watch api/cans.json --port 3004",
     "build": "react-scripts build",
+    "dev": "yarn run start | yarn run json-server",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
