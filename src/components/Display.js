@@ -7,9 +7,13 @@ class Display extends Component {
     this.state = {
       error: null,
       isLoaded: false,
-      cans: []
+      cans: [],
+      searchTerm: ''
     };
   }
+  handleSearchTermChange = event => {
+    this.setState({ searchTerm: event.target.value });
+  };
 
   componentDidMount() {
     axios
@@ -27,7 +31,7 @@ class Display extends Component {
   }
 
   render() {
-    const { error, isLoaded, cans } = this.state;
+    const { error, isLoaded, cans, searchTerm } = this.state;
     if (error) {
       return <div>Error: {error.message}</div>;
     } else if (!isLoaded) {
@@ -53,15 +57,22 @@ class Display extends Component {
                   <th>Size:</th>
                 </tr>
               </thead>
-              {cans.map(can => (
-                <tbody key={can.id} className="center">
-                  <tr>
-                    <td>{can.id}</td>
-                    <td>{can.location.name}</td>
-                    <td>{can.size}</td>{' '}
-                  </tr>
-                </tbody>
-              ))}
+              {cans
+                .filter(
+                  can =>
+                    `${can.id} ${can.location.name} ${can.size}`
+                      .toUpperCase()
+                      .indexOf(this.state.searchTerm.toUpperCase()) >= 0
+                )
+                .map(can => (
+                  <tbody key={can.id} className="center">
+                    <tr>
+                      <td>{can.id}</td>
+                      <td>{can.location.name}</td>
+                      <td>{can.size}</td>{' '}
+                    </tr>
+                  </tbody>
+                ))}
             </table>
           </section>
         </div>
