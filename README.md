@@ -2,6 +2,5 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 <h1> To run app: <h1>
 
-<h2>yarn dev<h2>
+<h2>"yarn dev"<h2> <h5>will run app on PORT:3000 and json-server on PORT:3004<h5>
 
-<p>will run app on PORT:3000 and json-server on PORT:3004</p>
