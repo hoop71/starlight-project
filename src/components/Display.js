@@ -82,9 +82,15 @@ class Display extends Component {
             <table className="table">
               <thead className="table-header">
                 <tr className="table-header-row">
-                  <th onClick={event => this.onSort(event, 'name')}>Name:</th>
-                  <th onClick={event => this.onSort(event, 'serial')}>Serial:</th>
-                  <th onClick={event => this.onSort(event, 'size')}>Size:</th>
+                  <th className="pointer" onClick={event => this.onSort(event, 'name')}>
+                    Name:
+                  </th>
+                  <th className="pointer" onClick={event => this.onSort(event, 'serial')}>
+                    Serial:
+                  </th>
+                  <th className="pointer" onClick={event => this.onSort(event, 'size')}>
+                    Size:
+                  </th>
                   <th>Created Date:</th>
                   <th>Modified Date:</th>
                   <th>Location Name:</th>

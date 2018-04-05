@@ -16,6 +16,10 @@
   text-transform: uppercase;
 }
 
+.table-header-row .pointer {
+  cursor: pointer;
+}
+
 .table-header-row th {
   min-width: 100px;
   border-top-left-radius: 5px;
